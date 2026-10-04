@@ -277,7 +277,7 @@
     font-family: var(--drx-font-main);
     min-height: 100vh;
     line-height: 1.5;
-    padding: 4rem 2rem;
+    padding: 5rem 2rem 4rem;
     -webkit-font-smoothing: antialiased;
     transition: var(--drx-motion-smooth);
   }
@@ -375,16 +375,29 @@
   footer a { color: var(--drx-color-comment); text-decoration: none; }
   footer a:hover { color: var(--drx-color-accent); }
 
-  .theme-mode-btn {
+  .floating-controls {
     position: fixed;
-    top: 1.5rem;
-    right: 4.5rem;
+    top: 1rem;
+    right: 1rem;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.55rem 0.9rem;
+    background-color: color-mix(in srgb, var(--drx-color-surface) 82%, transparent);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    border: var(--drx-border-subtle);
+    border-radius: 32px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  }
+
+  .theme-mode-btn {
     background: none;
     border: none;
     color: var(--drx-color-deactivate);
     cursor: pointer;
     transition: var(--drx-motion-smooth);
-    z-index: 10;
     padding: 0;
     display: flex;
   }
@@ -398,15 +411,11 @@
   .theme-mode-btn[data-mode="dark"] .icon-dark { display: block; }
 
   .settings-btn {
-    position: fixed;
-    top: 1.5rem;
-    right: 1.5rem;
     background: none;
     border: none;
     color: var(--drx-color-deactivate);
     cursor: pointer;
     transition: var(--drx-motion-smooth);
-    z-index: 10;
     padding: 0;
     display: flex;
   }
@@ -471,21 +480,23 @@
   }
 
   @media (max-width: 620px) {
-    body { padding: 2rem 1rem; }
+    body { padding: 5rem 1rem 2rem; }
     .content-card { padding: 2rem 1.5rem; }
     .greeting-title { font-size: 1.7rem; }
   }
 </style>
 </head>
 <body>
-<button id="settings-toggle" class="settings-btn" aria-label="Abrir ajustes" title="Ajustes">
-  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-</button>
+<div class="floating-controls">
 <button id="theme-mode-toggle" class="theme-mode-btn" aria-label="Tema: Auto (sistema)" title="Tema: Auto (sistema)">
   <svg class="icon-auto" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>
   <svg class="icon-light" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
   <svg class="icon-dark" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
 </button>
+<button id="settings-toggle" class="settings-btn" aria-label="Abrir ajustes" title="Ajustes">
+  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+</button>
+</div>
 <div class="wrap">
   <div class="content-card">
 
