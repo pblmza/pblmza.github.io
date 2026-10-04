@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="dracula">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,6 +35,20 @@
     --drx-shadow-card: 0 8px 24px rgba(0, 0, 0, 0.4);
     --drx-shadow-card-hover: 0 8px 24px color-mix(in srgb, var(--drx-color-accent) 15%, transparent),
                              0 12px 28px rgba(0, 0, 0, 0.45);
+  }
+
+  [data-theme="alucard"] {
+    --drx-color-base: #EDE9DA;
+    --drx-color-surface: #FFFBEB;
+    --drx-color-overlay: #DEDBCC;
+    --drx-color-highlight: #CECCC0;
+    --drx-color-text: #1F1F1F;
+    --drx-color-subtext: #6C664B;
+    --drx-color-deactivate: #BCBAB3;
+    --drx-color-comment: #6C664B;
+    --drx-color-accent: #CB3A2A;
+    --drx-color-focus: #036A96;
+    --drx-shadow-card: 0 8px 24px rgba(60, 50, 20, 0.12);
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -143,6 +157,28 @@
   footer a { color: var(--drx-color-comment); text-decoration: none; }
   footer a:hover { color: var(--drx-color-accent); }
 
+  .theme-mode-btn {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: none;
+    border: none;
+    color: var(--drx-color-deactivate);
+    cursor: pointer;
+    transition: var(--drx-motion-smooth);
+    z-index: 10;
+    padding: 0;
+    display: flex;
+  }
+  .theme-mode-btn:hover { color: var(--drx-color-accent); transform: scale(1.1); }
+  .theme-mode-btn .icon-light, .theme-mode-btn .icon-dark { display: none; }
+  .theme-mode-btn[data-mode="light"] .icon-auto,
+  .theme-mode-btn[data-mode="light"] .icon-dark,
+  .theme-mode-btn[data-mode="dark"] .icon-auto,
+  .theme-mode-btn[data-mode="dark"] .icon-light { display: none; }
+  .theme-mode-btn[data-mode="light"] .icon-light,
+  .theme-mode-btn[data-mode="dark"] .icon-dark { display: block; }
+
   @media (max-width: 620px) {
     body { padding: 2rem 1rem; }
     .content-card { padding: 2rem 1.5rem; }
@@ -151,6 +187,11 @@
 </style>
 </head>
 <body>
+<button id="theme-mode-toggle" class="theme-mode-btn" aria-label="Tema: Auto (sistema)" title="Tema: Auto (sistema)">
+  <svg class="icon-auto" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>
+  <svg class="icon-light" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+  <svg class="icon-dark" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+</button>
 <div class="wrap">
   <div class="content-card">
 
@@ -209,5 +250,34 @@
 
   </div>
 </div>
+
+<script>
+(function () {
+  var KEY = 'pblmza_theme_mode'; // auto | light | dark
+  var DARK = 'dracula', LIGHT = 'alucard';
+  var LABELS = { auto: 'Tema: Auto (sistema)', light: 'Tema: Claro', dark: 'Tema: Oscuro' };
+  var mq = window.matchMedia('(prefers-color-scheme: dark)');
+  function getMode() { var m = null; try { m = localStorage.getItem(KEY); } catch (e) {} return m || 'auto'; }
+  function apply() {
+    var mode = getMode();
+    var theme = mode === 'light' ? LIGHT : (mode === 'dark' || mq.matches) ? DARK : LIGHT;
+    document.documentElement.setAttribute('data-theme', theme);
+    var b = document.getElementById('theme-mode-toggle');
+    if (b) { b.dataset.mode = mode; b.title = LABELS[mode]; b.setAttribute('aria-label', LABELS[mode]); }
+  }
+  function cycle() {
+    var order = ['auto', 'light', 'dark'];
+    var next = order[(order.indexOf(getMode()) + 1) % 3];
+    try { localStorage.setItem(KEY, next); } catch (e) {}
+    apply();
+  }
+  apply();
+  document.getElementById('theme-mode-toggle').addEventListener('click', cycle);
+  document.addEventListener('keydown', function (e) {
+    if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 's') { e.preventDefault(); cycle(); }
+  });
+  if (mq.addEventListener) mq.addEventListener('change', apply);
+})();
+</script>
 </body>
 </html>
