@@ -2,7 +2,7 @@
 <html lang="es" data-theme="dracula">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>pblmza · Proyectos y sitios</title>
 <meta name="description" content="Páginas web y repositorios públicos de pblmza en GitHub.">
 <style>
@@ -480,7 +480,17 @@
   }
 
   @media (max-width: 620px) {
-    body { padding: 5rem 1rem 2rem; }
+    body { padding: calc(4.5rem + env(safe-area-inset-top)) 1rem 2rem; }
+    .floating-controls {
+      top: 0; left: 0; right: 0;
+      padding: calc(0.7rem + env(safe-area-inset-top)) 1.25rem 0.7rem;
+      justify-content: flex-end;
+      gap: 1.25rem;
+      border-radius: 0;
+      border-width: 0 0 1px 0;
+      background-color: color-mix(in srgb, var(--drx-color-surface) 94%, transparent);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+    }
     .content-card { padding: 2rem 1.5rem; }
     .greeting-title { font-size: 1.7rem; }
   }
